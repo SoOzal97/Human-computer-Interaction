@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ThreadCo</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav>
+    <div class="nav-logo">ThreadCo</div>
+    <ul class="nav-links">
+      <li><a onclick="showPage('home')" id="nav-home" class="active">Home</a></li>
+      <li><a onclick="showPage('shop')" id="nav-shop">Shop</a></li>
+      <li><a onclick="showPage('cart')" id="nav-cart">Cart</a></li>
+      <li><a onclick="showPage('contact')" id="nav-contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+
+  <!-- ==============================
+       PAGE: HOME
+       ============================== -->
+  <div class="page active" id="page-home">
+
+    <!-- Address bar mock -->
+    <div class="url-bar">threadco.com.au/home</div>
+
+    <!-- Hero -->
+    <section class="hero">
+      <h1>WELCOME TO THREADCO</h1>
+      <p>Discover the latest in fashion for men &amp; women</p>
+      <button class="btn-dark" onclick="showPage('shop')">Shop Now</button>
+    </section>
+
+    <!-- Featured Products -->
+    <section class="featured">
+      <h2>Featured Products</h2>
+      <div class="product-grid" id="featuredGrid"></div>
+    </section>
+
+    <!-- Footer -->
+    <footer>© 2026 ThreadCo. All rights reserved.</footer>
+  </div>
+
+
+  <!-- ==============================
+       PAGE: SHOP
+       ============================== -->
+  <div class="page" id="page-shop">
+    <div class="url-bar">threadco.com.au/shop</div>
+
+    <div class="shop-layout">
+
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <h3>Categories</h3>
+        <ul class="cat-list">
+          <li class="active" onclick="filterCat(this,'All')">&#9658; All Items</li>
+          <li onclick="filterCat(this,'Men')">Men</li>
+          <li onclick="filterCat(this,'Women')">Women</li>
+          <li onclick="filterCat(this,'Accessories')">Accessories</li>
+          <li onclick="filterCat(this,'Sale')">Sale</li>
+        </ul>
+        <h3 class="price-heading">Price Range</h3>
+        <input type="range" min="0" max="200" value="200" id="priceRange" oninput="updatePrice(this.value)" />
+        <p class="price-label">$0 — $<span id="priceVal">200</span></p>
+      </aside>
+
+      <!-- Main -->
+      <main>
+        <h2 id="shopHeading">All Products (12 items)</h2>
+        <div class="shop-grid" id="shopGrid"></div>
+      </main>
+
+    </div>
+
+    <footer>© 2026 ThreadCo. All rights reserved.</footer>
+  </div>
+
+
+  <!-- ==============================
+       PAGE: PRODUCT DETAIL
+       ============================== -->
+  <div class="page" id="page-detail">
+    <div class="url-bar" id="detailUrl">threadco.com.au/shop/product</div>
+
+    <div class="detail-wrap">
+
+      <!-- Left: images -->
+      <div class="detail-left">
+        <div class="detail-main-img">
+          <span>Product Image<br><small>600 × 600 px</small></span>
+        </div>
+        <div class="detail-thumbs">
+          <div class="thumb active"></div>
+          <div class="thumb"></div>
+          <div class="thumb"></div>
+          <div class="thumb"></div>
+        </div>
+      </div>
+
+      <!-- Right: info -->
+      <div class="detail-right">
+        <p class="breadcrumb" id="detailBreadcrumb">Home &gt; Shop &gt; Men &gt; Product</p>
+        <h1 id="detailName">Product Name</h1>
+        <div class="detail-rating">★★★★☆ <span>(42 reviews)</span> | SKU: TH-001</div>
+        <div class="detail-price-row">
+          <span class="detail-price" id="detailPrice">$89.99</span>
+          <span class="detail-shipping">Free shipping on orders over $100</span>
+        </div>
+        <div class="detail-stock">✓ In Stock</div>
+        <p class="detail-desc" id="detailDesc">A timeless classic, perfect for any season.</p>
+
+        <p class="detail-label">Colour:</p>
+        <div class="colour-swatches">
+          <div class="swatch black active" title="Black"></div>
+          <div class="swatch charcoal" title="Charcoal"></div>
+          <div class="swatch brown" title="Brown"></div>
+          <div class="swatch grey" title="Grey"></div>
+        </div>
+        <div class="colour-names">
+          <span>Black</span><span>Charcoal</span><span>Brown</span><span>Grey</span>
+        </div>
+
+        <div class="size-row-header">
+          <p class="detail-label">Size:</p>
+          <a class="size-guide">Size Guide →</a>
+        </div>
+        <div class="size-btns" id="sizeBtns">
+          <button class="size-btn" onclick="selectSize(this)">XS</button>
+          <button class="size-btn" onclick="selectSize(this)">S</button>
+          <button class="size-btn active" onclick="selectSize(this)">M</button>
+          <button class="size-btn" onclick="selectSize(this)">L</button>
+          <button class="size-btn" onclick="selectSize(this)">XL</button>
+          <button class="size-btn" onclick="selectSize(this)">XXL</button>
+        </div>
+
+        <div class="qty-row">
+          <p class="detail-label">Qty:</p>
+          <div class="qty-control">
+            <button onclick="changeQty(-1)">−</button>
+            <span id="detailQty">1</span>
+            <button onclick="changeQty(1)">+</button>
+          </div>
+        </div>
+
+        <div class="detail-actions">
+          <button class="btn-dark btn-addcart" onclick="addCurrentToCart()">Add to Cart</button>
+          <button class="btn-wish">&#9825; Add to Wishlist</button>
+        </div>
+
+        <div class="detail-badges">
+          <p>&#9744; Free delivery on orders over $100</p>
+          <p>&#8617; Free 30-day returns</p>
+          <p>&#9744; Secure checkout guaranteed</p>
+        </div>
+      </div>
+
+    </div>
+
+    <footer>© 2026 ThreadCo. All rights reserved.</footer>
+  </div>
+
+
+  <!-- ==============================
+       PAGE: CART
+       ============================== -->
+  <div class="page" id="page-cart">
+    <div class="url-bar">threadco.com.au/cart</div>
+
+    <div class="cart-wrap">
+
+      <!-- Cart Table -->
+      <div class="cart-main">
+        <h2 id="cartHeading">Shopping Cart (0 items)</h2>
+        <table class="cart-table">
+          <thead>
+            <tr>
+              <th>Product</th>
+              <th>Price</th>
+              <th>Quantity</th>
+              <th>Subtotal</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="cartBody"></tbody>
+        </table>
+        <div class="empty-cart" id="emptyCart">
+          <p>Your cart is empty.</p>
+          <button class="btn-dark" onclick="showPage('shop')">Continue Shopping</button>
+        </div>
+      </div>
+
+      <!-- Order Summary -->
+      <div class="order-summary">
+        <h3>Order Summary</h3>
+        <div class="summary-row"><span>Subtotal:</span><span id="sumSubtotal">$0.00</span></div>
+        <div class="summary-row"><span>Shipping:</span><span>Free</span></div>
+        <div class="summary-row"><span>Discount:</span><span id="sumDiscount">-$0.00</span></div>
+        <div class="summary-row total-row"><span>Total:</span><span id="sumTotal">$0.00</span></div>
+        <button class="btn-dark btn-checkout">Proceed to Checkout</button>
+        <button class="btn-light" onclick="showPage('shop')">Continue Shopping</button>
+      </div>
+
+    </div>
+
+    <footer>© 2026 ThreadCo. All rights reserved.</footer>
+  </div>
+
+
+  <!-- ==============================
+       PAGE: CONTACT
+       ============================== -->
+  <div class="page" id="page-contact">
+    <div class="url-bar">threadco.com.au/contact</div>
+
+    <div class="contact-header">
+      <h1>Contact Us</h1>
+      <p>We'd love to hear from you. Fill out the form below.</p>
+    </div>
+
+    <div class="contact-wrap">
+
+      <!-- Form -->
+      <div class="contact-form-box">
+        <h3>Send Us a Message</h3>
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" class="form-input" />
+        </div>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" class="form-input" />
+        </div>
+        <div class="form-group">
+          <label>Subject</label>
+          <input type="text" class="form-input" />
+        </div>
+        <div class="form-group">
+          <label>Message</label>
+          <textarea class="form-input form-textarea"></textarea>
+        </div>
+        <button class="btn-dark" onclick="handleContact()">Send Message</button>
+      </div>
+
+      <!-- Contact Details -->
+      <div class="contact-info-col">
+        <div class="contact-details-box">
+          <h3>Contact Details</h3>
+          <p>&#9744; &nbsp; 123 Fashion Street, Sydney NSW 2000</p>
+          <p>&#9744; &nbsp; +61 2 9999 0000</p>
+          <p>&#9745; &nbsp; hello@threadco.com.au</p>
+          <p>&#9744; &nbsp; Mon-Fri: 9am – 5pm</p>
+        </div>
+        <div class="map-box">[ Map Location ]</div>
+      </div>
+
+    </div>
+
+    <footer>© 2026 ThreadCo. All rights reserved.</footer>
+  </div>
+
+
+  <!-- ==============================
+       JAVASCRIPT
+       ============================== -->
+  <script>
+    /* ── Data ── */
+    const products = [
+      { id:1,  name:'Casual Tee',       category:'Men',         price:39.99, desc:'A comfortable everyday casual tee in soft cotton.' },
+      { id:2,  name:'Denim Jacket',     category:'Men',         price:39.99, desc:'Classic denim jacket with two chest pockets and button closure.' },
+      { id:3,  name:'Summer Dress',     category:'Women',       price:39.99, desc:'Light and breezy summer dress perfect for warm days.' },
+      { id:4,  name:'Cap',              category:'Accessories', price:39.99, desc:'Adjustable cap available in multiple colours.' },
+      { id:5,  name:'Formal Shirt',     category:'Men',         price:39.99, desc:'Crisp formal shirt for office or evening wear.' },
+      { id:6,  name:'Sneakers',         category:'Accessories', price:39.99, desc:'Comfortable everyday sneakers with cushioned sole.' },
+      { id:7,  name:'Handbag',          category:'Accessories', price:39.99, desc:'Stylish handbag with multiple compartments.' },
+      { id:8,  name:'Scarf',            category:'Accessories', price:39.99, desc:'Soft knit scarf available in several colourways.' },
+      { id:9,  name:'Classic Denim Jacket', category:'Men',     price:89.99, desc:'A timeless classic denim jacket, perfect for any season. Slim fit with two chest pockets and button closure. 100% premium denim.' },
+      { id:10, name:'Casual White Tee', category:'Women',       price:29.99, desc:'Simple and clean white tee made from 100% organic cotton.' },
+      { id:11, name:'Canvas Sneakers',  category:'Accessories', price:59.99, desc:'Classic canvas sneakers with rubber sole. Available in multiple colours.' },
+      { id:12, name:'Floral Blouse',    category:'Women',       price:39.99, desc:'Elegant floral blouse in a relaxed fit.' },
+    ];
+
+    let cart = [];
+    let currentProduct = null;
+    let currentQty = 1;
+    let currentFilter = 'All';
+
+    /* ── Navigation ── */
+    function showPage(name) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.getElementById('page-' + name).classList.add('active');
+      document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+      const nl = document.getElementById('nav-' + name);
+      if (nl) nl.classList.add('active');
+      window.scrollTo(0, 0);
+      if (name === 'home')  renderFeatured();
+      if (name === 'shop')  renderShop();
+      if (name === 'cart')  renderCart();
+    }
+
+    /* ── Placeholder image SVG ── */
+    function imgBox(cls) {
+      return `<div class="img-placeholder ${cls || ''}"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" fill="#ddd"/><line x1="0" y1="0" x2="100" y2="100" stroke="#bbb" stroke-width="1.5"/><line x1="100" y1="0" x2="0" y2="100" stroke="#bbb" stroke-width="1.5"/></svg></div>`;
+    }
+
+    /* ── Featured ── */
+    function renderFeatured() {
+      const picks = products.slice(0, 4);
+      document.getElementById('featuredGrid').innerHTML = picks.map(p => `
+        <div class="feat-card" onclick="openProduct(${p.id})">
+          ${imgBox()}
+          <div class="feat-info">
+            <p class="feat-name">${p.name}</p>
+            <p class="feat-price">$${p.price.toFixed(2)}</p>
+            <button class="btn-dark btn-sm" onclick="event.stopPropagation(); quickAdd(${p.id})">Add to Cart</button>
+          </div>
+        </div>`).join('');
+    }
+
+    /* ── Shop ── */
+    function renderShop() {
+      const list = currentFilter === 'All' ? products : products.filter(p => p.category === currentFilter);
+      document.getElementById('shopHeading').textContent = (currentFilter === 'All' ? 'All Products' : currentFilter) + ` (${list.length} items)`;
+      document.getElementById('shopGrid').innerHTML = list.map(p => `
+        <div class="shop-card" onclick="openProduct(${p.id})">
+          ${imgBox()}
+          <p class="shop-name">${p.name}</p>
+          <p class="shop-price">$${p.price.toFixed(2)}</p>
+          <button class="btn-dark btn-sm">View</button>
+        </div>`).join('');
+    }
+
+    function filterCat(el, cat) {
+      document.querySelectorAll('.cat-list li').forEach(li => li.classList.remove('active'));
+      el.classList.add('active');
+      currentFilter = cat;
+      renderShop();
+    }
+
+    function updatePrice(val) {
+      document.getElementById('priceVal').textContent = val;
+    }
+
+    /* ── Product Detail ── */
+    function openProduct(id) {
+      currentProduct = products.find(p => p.id === id);
+      currentQty = 1;
+      if (!currentProduct) return;
+      document.getElementById('detailName').textContent = currentProduct.name;
+      document.getElementById('detailPrice').textContent = '$' + currentProduct.price.toFixed(2);
+      document.getElementById('detailDesc').textContent = currentProduct.desc;
+      document.getElementById('detailUrl').textContent = 'threadco.com.au/shop/' + currentProduct.name.toLowerCase().replace(/ /g,'-');
+      document.getElementById('detailBreadcrumb').innerHTML = `Home &gt; Shop &gt; ${currentProduct.category} &gt; ${currentProduct.name}`;
+      document.getElementById('detailQty').textContent = 1;
+      document.querySelectorAll('.size-btn').forEach((b,i) => b.classList.toggle('active', i===2));
+      showPage('detail');
+      document.getElementById('nav-shop').classList.add('active');
+    }
+
+    function selectSize(btn) {
+      document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+
+    function changeQty(d) {
+      currentQty = Math.max(1, currentQty + d);
+      document.getElementById('detailQty').textContent = currentQty;
+    }
+
+    function addCurrentToCart() {
+      if (!currentProduct) return;
+      const size = document.querySelector('.size-btn.active')?.textContent || 'M';
+      addToCart(currentProduct, currentQty, size);
+      showToast(currentProduct.name + ' added to cart');
+    }
+
+    function quickAdd(id) {
+      const p = products.find(x => x.id === id);
+      if (p) { addToCart(p, 1, 'M'); showToast(p.name + ' added to cart'); }
+    }
+
+    /* ── Cart ── */
+    function addToCart(product, qty, size) {
+      const key = product.id + '-' + size;
+      const existing = cart.find(i => i.key === key);
+      if (existing) existing.qty += qty;
+      else cart.push({ key, product, qty, size, color: 'Blue' });
+      updateCartNav();
+    }
+
+    function updateCartNav() {
+      const total = cart.reduce((s, i) => s + i.qty, 0);
+      document.getElementById('nav-cart').textContent = total > 0 ? `Cart (${total})` : 'Cart';
+    }
+
+    function renderCart() {
+      const tbody = document.getElementById('cartBody');
+      const empty = document.getElementById('emptyCart');
+      const table = document.querySelector('.cart-table');
+      if (cart.length === 0) {
+        tbody.innerHTML = '';
+        table.style.display = 'none';
+        empty.style.display = 'block';
+        document.getElementById('cartHeading').textContent = 'Shopping Cart (0 items)';
+        updateSummary(0);
+        return;
+      }
+      table.style.display = 'table';
+      empty.style.display = 'none';
+      const total = cart.reduce((s, i) => s + i.qty, 0);
+      document.getElementById('cartHeading').textContent = `Shopping Cart (${total} items)`;
+      tbody.innerHTML = cart.map(item => `
+        <tr>
+          <td class="cart-product-cell">
+            <div class="cart-img">${imgBox('sm')}</div>
+            <div>
+              <strong>${item.product.name}</strong><br>
+              <small>Size: ${item.size} | Color: ${item.color}</small>
+            </div>
+          </td>
+          <td>$${item.product.price.toFixed(2)}</td>
+          <td>
+            <div class="cart-qty">
+              <button onclick="cartQty('${item.key}',-1)">−</button>
+              <span>${item.qty}</span>
+              <button onclick="cartQty('${item.key}',1)">+</button>
+            </div>
+          </td>
+          <td>$${(item.product.price * item.qty).toFixed(2)}</td>
+          <td><span class="remove-x" onclick="removeItem('${item.key}')">×</span></td>
+        </tr>`).join('');
+      const subtotal = cart.reduce((s, i) => s + i.product.price * i.qty, 0);
+      updateSummary(subtotal);
+    }
+
+    function updateSummary(sub) {
+      document.getElementById('sumSubtotal').textContent = '$' + sub.toFixed(2);
+      document.getElementById('sumTotal').textContent = '$' + sub.toFixed(2);
+    }
+
+    function cartQty(key, d) {
+      const item = cart.find(i => i.key === key);
+      if (item) { item.qty = Math.max(1, item.qty + d); updateCartNav(); renderCart(); }
+    }
+
+    function removeItem(key) {
+      cart = cart.filter(i => i.key !== key);
+      updateCartNav(); renderCart();
+    }
+
+    /* ── Contact ── */
+    function handleContact() { showToast("Message sent! We'll be in touch shortly."); }
+
+    /* ── Toast ── */
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg; t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 3000);
+    }
+
+    /* ── Init ── */
+    renderFeatured();
+  </script>
+
+</body>
+</html>
