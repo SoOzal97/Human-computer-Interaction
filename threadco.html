@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ThreadCo</title>
+  <link rel="stylesheet" href="design_threadco.css" />
+  <style>
+    /* ── Image overrides so real images fill placeholder areas ── */
+    .img-placeholder img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .detail-main-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .cart-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    /* Hero background image overlay */
+    .hero {
+      background: url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1400&h=500&fit=crop&q=80') center/cover no-repeat;
+      position: relative;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(255, 255, 255, 0.72);
+    }
+    .hero * { position: relative; z-index: 1; }
+    /* Map image */
+    .map-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav>
+    <div class="nav-logo">ThreadCo</div>
+    <ul class="nav-links">
+      <li><a onclick="showPage('home')" id="nav-home" class="active">Home</a></li>
+      <li><a onclick="showPage('shop')" id="nav-shop">Shop</a></li>
+      <li><a onclick="showPage('cart')" id="nav-cart">Cart</a></li>
+      <li><a onclick="showPage('contact')" id="nav-contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+
+  <!-- ==============================
+       PAGE: HOME
+       ============================== -->
+  <div class="page active" id="page-home">
+
+    <!-- Address bar mock -->
+    <div class="url-bar">threadco.com.au/home</div>
+
+    <!-- Hero -->
+    <section class="hero">
+      <h1>WELCOME TO THREADCO</h1>
+      <p>Discover the latest in fashion for men &amp; women</p>
+      <button class="btn-dark" onclick="showPage('shop')">Shop Now</button>
+    </section>
+
+    <!-- Featured Products -->
+    <section class="featured">
+      <h2>Featured Products</h2>
+      <div class="product-grid" id="featuredGrid"></div>
+    </section>
+
+    <!-- Footer -->
+    <footer>&copy; 2026 ThreadCo. All rights reserved.</footer>
+  </div>
+
+
+  <!-- ==============================
+       PAGE: SHOP
+       ============================== -->
+  <div class="page" id="page-shop">
+    <div class="url-bar">threadco.com.au/shop</div>
+
+    <div class="shop-layout">
+
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <h3>Categories</h3>
+        <ul class="cat-list">
+          <li class="active" onclick="filterCat(this,'All')">&#9658; All Items</li>
+          <li onclick="filterCat(this,'Men')">Men</li>
+          <li onclick="filterCat(this,'Women')">Women</li>
+          <li onclick="filterCat(this,'Accessories')">Accessories</li>
+          <li onclick="filterCat(this,'Sale')">Sale</li>
+        </ul>
+        <h3 class="price-heading">Price Range</h3>
+        <input type="range" min="0" max="200" value="200" id="priceRange" oninput="updatePrice(this.value)" />
+        <p class="price-label">$0 &mdash; $<span id="priceVal">200</span></p>
+      </aside>
+
+      <!-- Main -->
+      <main>
+        <h2 id="shopHeading">All Products (12 items)</h2>
+        <div class="shop-grid" id="shopGrid"></div>
+      </main>
+
+    </div>
+
+    <footer>&copy; 2026 ThreadCo. All rights reserved.</footer>
+  </div>
+
+
+  <!-- ==============================
+       PAGE: PRODUCT DETAIL
+       ============================== -->
+  <div class="page" id="page-detail">
+    <div class="url-bar" id="detailUrl">threadco.com.au/shop/product</div>
+
+    <div class="detail-wrap">
+
+      <!-- Left: images -->
+      <div class="detail-left">
+        <div class="detail-main-img" id="detailMainImg">
+          <span>Product Image<br><small>600 &times; 600 px</small></span>
+        </div>
+        <div class="detail-thumbs" id="detailThumbs">
+          <div class="thumb active"></div>
+          <div class="thumb"></div>
+          <div class="thumb"></div>
+          <div class="thumb"></div>
+        </div>
+      </div>
+
+      <!-- Right: info -->
+      <div class="detail-right">
+        <p class="breadcrumb" id="detailBreadcrumb">Home &gt; Shop &gt; Men &gt; Product</p>
+        <h1 id="detailName">Product Name</h1>
+        <div class="detail-rating">&#9733;&#9733;&#9733;&#9733;&#9734; <span>(42 reviews)</span> | SKU: TH-001</div>
+        <div class="detail-price-row">
+          <span class="detail-price" id="detailPrice">$89.99</span>
+          <span class="detail-shipping">Free shipping on orders over $100</span>
+        </div>
+        <div class="detail-stock">&#10003; In Stock</div>
+        <p class="detail-desc" id="detailDesc">A timeless classic, perfect for any season.</p>
+
+        <p class="detail-label">Colour:</p>
+        <div class="colour-swatches">
+          <div class="swatch black active" title="Black"></div>
+          <div class="swatch charcoal" title="Charcoal"></div>
+          <div class="swatch brown" title="Brown"></div>
+          <div class="swatch grey" title="Grey"></div>
+        </div>
+        <div class="colour-names">
+          <span>Black</span><span>Charcoal</span><span>Brown</span><span>Grey</span>
+        </div>
+
+        <div class="size-row-header">
+          <p class="detail-label">Size:</p>
+          <a class="size-guide">Size Guide &rarr;</a>
+        </div>
+        <div class="size-btns" id="sizeBtns">
+          <button class="size-btn" onclick="selectSize(this)">XS</button>
+          <button class="size-btn" onclick="selectSize(this)">S</button>
+          <button class="size-btn active" onclick="selectSize(this)">M</button>
+          <button class="size-btn" onclick="selectSize(this)">L</button>
+          <button class="size-btn" onclick="selectSize(this)">XL</button>
+          <button class="size-btn" onclick="selectSize(this)">XXL</button>
+        </div>
+
+        <div class="qty-row">
+          <p class="detail-label">Qty:</p>
+          <div class="qty-control">
+            <button onclick="changeQty(-1)">&minus;</button>
+            <span id="detailQty">1</span>
+            <button onclick="changeQty(1)">+</button>
+          </div>
+        </div>
+
+        <div class="detail-actions">
+          <button class="btn-dark btn-addcart" onclick="addCurrentToCart()">Add to Cart</button>
+          <button class="btn-wish">&#9825; Add to Wishlist</button>
+        </div>
+
+        <div class="detail-badges">
+          <p>&#9744; Free delivery on orders over $100</p>
+          <p>&#8617; Free 30-day returns</p>
+          <p>&#9744; Secure checkout guaranteed</p>
+        </div>
+      </div>
+
+    </div>
+
+    <footer>&copy; 2026 ThreadCo. All rights reserved.</footer>
+  </div>
+
+
+  <!-- ==============================
+       PAGE: CART
+       ============================== -->
+  <div class="page" id="page-cart">
+    <div class="url-bar">threadco.com.au/cart</div>
+
+    <div class="cart-wrap">
+
+      <!-- Cart Table -->
+      <div class="cart-main">
+        <h2 id="cartHeading">Shopping Cart (0 items)</h2>
+        <table class="cart-table">
+          <thead>
+            <tr>
+              <th>Product</th>
+              <th>Price</th>
+              <th>Quantity</th>
+              <th>Subtotal</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="cartBody"></tbody>
+        </table>
+        <div class="empty-cart" id="emptyCart">
+          <p>Your cart is empty.</p>
+          <button class="btn-dark" onclick="showPage('shop')">Continue Shopping</button>
+        </div>
+      </div>
+
+      <!-- Order Summary -->
+      <div class="order-summary">
+        <h3>Order Summary</h3>
+        <div class="summary-row"><span>Subtotal:</span><span id="sumSubtotal">$0.00</span></div>
+        <div class="summary-row"><span>Shipping:</span><span>Free</span></div>
+        <div class="summary-row"><span>Discount:</span><span id="sumDiscount">-$0.00</span></div>
+        <div class="summary-row total-row"><span>Total:</span><span id="sumTotal">$0.00</span></div>
+        <button class="btn-dark btn-checkout">Proceed to Checkout</button>
+        <button class="btn-light" onclick="showPage('shop')">Continue Shopping</button>
+      </div>
+
+    </div>
+
+    <footer>&copy; 2026 ThreadCo. All rights reserved.</footer>
+  </div>
+
+
+  <!-- ==============================
+       PAGE: CONTACT
+       ============================== -->
+  <div class="page" id="page-contact">
+    <div class="url-bar">threadco.com.au/contact</div>
+
+    <div class="contact-header">
+      <h1>Contact Us</h1>
+      <p>We'd love to hear from you. Fill out the form below.</p>
+    </div>
+
+    <div class="contact-wrap">
+
+      <!-- Form -->
+      <div class="contact-form-box">
+        <h3>Send Us a Message</h3>
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" class="form-input" />
+        </div>
+        <div class="form-group">
+          <label>Email Address</label>
+          <input type="email" class="form-input" />
+        </div>
+        <div class="form-group">
+          <label>Subject</label>
+          <input type="text" class="form-input" />
+        </div>
+        <div class="form-group">
+          <label>Message</label>
+          <textarea class="form-input form-textarea"></textarea>
+        </div>
+        <button class="btn-dark" onclick="handleContact()">Send Message</button>
+      </div>
+
+      <!-- Contact Details -->
+      <div class="contact-info-col">
+        <div class="contact-details-box">
+          <h3>Contact Details</h3>
+          <p>&#9744; &nbsp; 123 Fashion Street, Sydney NSW 2000</p>
+          <p>&#9744; &nbsp; +61 2 9999 0000</p>
+          <p>&#9745; &nbsp; hello@threadco.com.au</p>
+          <p>&#9744; &nbsp; Mon-Fri: 9am &ndash; 5pm</p>
+        </div>
+        <div class="map-box">
+          <img src="https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?w=600&h=300&fit=crop&q=80" alt="Sydney, Australia" />
+        </div>
+      </div>
+
+    </div>
+
+    <footer>&copy; 2026 ThreadCo. All rights reserved.</footer>
+  </div>
+
+
+  <!-- ==============================
+       JAVASCRIPT
+       ============================== -->
+  <script>
+    /*
+     * ── Product Data ──
+     * All images sourced from Unsplash (https://unsplash.com)
+     * Free for commercial use, no attribution required.
+     */
+    const products = [
+      {
+        id: 1,
+        name: 'Casual Tee',
+        category: 'Men',
+        price: 39.99,
+        desc: 'A comfortable everyday casual tee in soft cotton.',
+        img: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=400&fit=crop&q=80',
+        thumbs: [
+          'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=100&h=100&fit=crop&q=80',
+          'https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=100&h=100&fit=crop&q=80',
+          'https://images.unsplash.com/photo-1562157873-818bc0726f68?w=100&h=100&fit=crop&q=80',
+          'https://images.unsplash.com/photo-1529374255404-311a2a4f1fd9?w=100&h=100&fit=crop&q=80'
+        ]
+      },
+      {
+        id: 2,
+        name: 'Denim Jacket',
+        category: 'Men',
+        price: 89.99,
+        desc: 'Classic denim jacket with two chest pockets and button closure.',
+        img: 'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=400&h=400&fit=crop&q=80',
+        thumbs: [
+          'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=100&h=100&fit=crop&q=80',
+          'https://images.unsplash.com/photo-1543076447-215ad9ba6923?w=100&h=100&fit=crop&q=80',
+          'https://images.unsplash.com/photo-1576995853123-5a10305d93c0?w=100&h=100&fit=crop&q=80',
+          'https://images.unsplash.com/photo-1559551409-dadc959f76b8?w=100&h=100&fit=crop&q=80'
+        ]
+      },
+      {
+        id: 3,
+        name: 'Summer Dress',
+        category: 'Women',
+        price: 59.99,
+        desc: 'Light and breezy summer dress perfect for warm days.',
+        img: 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=400&h=400&fit=crop&q=80',
+        thumbs: [
+          'https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=100&h=100&fit=crop&q=80',
+          'https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=100&h=100&fit=crop&q=80',
+          'https://images.unsplash.com/photo-1585487000160-6ebcfceb0d44?w=100&h=100&fit=crop&q=80',
+          'https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=100&h=100&fit=crop&q=80'
+        ]
+      },
+      {
+        id: 4,
+        name: 'Cap',
+        category: 'Accessories',
+        price: 24.99,
+        desc: 'Adjustable cap available in multiple colours.',
+        img: 'https://images.unsplash.com/photo-1588850561407-ed78c334e67a?w=400&h=400&fit=crop&q=80',
+        thumbs: [
+          'https://images.unsplash.com/photo-1588850561407-ed78c334e67a?w=100&h=100&fit=crop&q=80',
+          'https://images.unsplash.com/photo-1556306535-0f09a537f0a3?w=100&h=100&fit=crop&q=80',
+          'https://images.unsplash.com/photo-1534215754734-18e55d13e346?w=100&h=100&fit=crop&q=80',
+          'https://images.unsplash.com/photo-1575428652377-a2d80e2277fc?w=100&h=100&fit=crop&q=80'
+        ]
+      },
+      {
+        id: 5,
+        name: 'Formal Shirt',
+        category: 'Men',
+        price: 69.99,
+        desc: 'Crisp formal shirt for office or evening wear.',
+        img: 'https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=400&h=400&fit=crop&q=80',
+        thumbs: [
+          'https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=100&h=100&fit=crop&q=80',
+          'https://images.unsplash.com/photo-1598033129183-c4f50c736c10?w=100&h=100&fit=crop&q=80',
+          'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=100&h=100&fit=crop&q=80',
+          'https://images.unsplash.com/photo-1620012253295-c15cc3e65df4?w=100&h=100&fit=crop&q=80'
+        ]
+      },
+      {
+        id: 6,
+        name: 'Sneakers',
+        category: 'Accessories',
+        price: 79.99,
+        desc: 'Comfortable everyday sneakers with cushioned sole.',
+        img: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&h=400&fit=crop&q=80',
+        thumbs: [
+          'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=100&h=100&fit=crop&q=80',
+          'https://images.unsplash.com/photo-1460353581641-37baddab0fa2?w=100&h=100&fit=crop&q=80',
+          'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=100&h=100&fit=crop&q=80',
+          'https://images.unsplash.com/photo-1549298916-b41d501d3772?w=100&h=100&fit=crop&q=80'
+        ]
+      },
+      {
+        id: 7,
+        name: 'Handbag',
+        category: 'Accessories',
+        price: 99.99,
+        desc: 'Stylish handbag with multiple compartments.',
+        img: 'https://images.unsplash.com/photo-1548036328-c896d691f642?w=400&h=400&fit=crop&q=80',
+        thumbs: [
+          'https://images.unsplash.com/photo-1548036328-c896d691f642?w=100&h=100&fit=crop&q=80',
+          'https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=100&h=100&fit=crop&q=80',
+          'https://images.unsplash.com/photo-1566150905458-1bf1fc113f0d?w=100&h=100&fit=crop&q=80',
+          'https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=100&h=100&fit=crop&q=80'
+        ]
+      },
+      {
+        id: 8,
+        name: 'Scarf',
+        category: 'Accessories',
+        price: 29.99,
+        desc: 'Soft knit scarf available in several colourways.',
+        img: 'https://images.unsplash.com/photo-1601924921557-45e6dea0a157?w=400&h=400&fit=crop&q=80',
+        thumbs: [
+          'https://images.unsplash.com/photo-1601924921557-45e6dea0a157?w=100&h=100&fit=crop&q=80',
+          'https://images.unsplash.com/photo-1520903920243-00d872a2d1c9?w=100&h=100&fit=crop&q=80',
+          'https://images.unsplash.com/photo-1457545195570-67f207084966?w=100&h=100&fit=crop&q=80',
+          'https://images.unsplash.com/photo-1609803384069-19f3e5a70e75?w=100&h=100&fit=crop&q=80'
+        ]
+      },
+      {
+        id: 9,
+        name: 'Classic Denim Jacket',
+        category: 'Men',
+        price: 89.99,
+        desc: 'A timeless classic denim jacket, perfect for any season. Slim fit with two chest pockets and button closure. 100% premium denim.',
+        img: 'https://images.unsplash.com/photo-1543076447-215ad9ba6923?w=400&h=400&fit=crop&q=80',
+        thumbs: [
+          'https://images.unsplash.com/photo-1543076447-215ad9ba6923?w=100&h=100&fit=crop&q=80',
+          'https://images.unsplash.com/photo-1551028719-00167b16eac5?w=100&h=100&fit=crop&q=80',
+          'https://images.unsplash.com/photo-1576995853123-5a10305d93c0?w=100&h=100&fit=crop&q=80',
+          'https://images.unsplash.com/photo-1559551409-dadc959f76b8?w=100&h=100&fit=crop&q=80'
+        ]
+      },
+      {
+        id: 10,
+        name: 'Casual White Tee',
+        category: 'Women',
+        price: 29.99,
+        desc: 'Simple and clean white tee made from 100% organic cotton.',
+        img: 'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=400&h=400&fit=crop&q=80',
+        thumbs: [
+          'https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=100&h=100&fit=crop&q=80',
+          'https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=100&h=100&fit=crop&q=80',
+          'https://images.unsplash.com/photo-1562157873-818bc0726f68?w=100&h=100&fit=crop&q=80',
+          'https://images.unsplash.com/photo-1529374255404-311a2a4f1fd9?w=100&h=100&fit=crop&q=80'
+        ]
+      },
+      {
+        id: 11,
+        name: 'Canvas Sneakers',
+        category: 'Accessories',
+        price: 59.99,
+        desc: 'Classic canvas sneakers with rubber sole. Available in multiple colours.',
+        img: 'https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?w=400&h=400&fit=crop&q=80',
+        thumbs: [
+          'https://images.unsplash.com/photo-1525966222134-fcfa99b8ae77?w=100&h=100&fit=crop&q=80',
+          'https://images.unsplash.com/photo-1460353581641-37baddab0fa2?w=100&h=100&fit=crop&q=80',
+          'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=100&h=100&fit=crop&q=80',
+          'https://images.unsplash.com/photo-1549298916-b41d501d3772?w=100&h=100&fit=crop&q=80'
+        ]
+      },
+      {
+        id: 12,
+        name: 'Floral Blouse',
+        category: 'Women',
+        price: 49.99,
+        desc: 'Elegant floral blouse in a relaxed fit.',
+        img: 'https://images.unsplash.com/photo-1564257631407-4deb1f99d992?w=400&h=400&fit=crop&q=80',
+        thumbs: [
+          'https://images.unsplash.com/photo-1564257631407-4deb1f99d992?w=100&h=100&fit=crop&q=80',
+          'https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=100&h=100&fit=crop&q=80',
+          'https://images.unsplash.com/photo-1585487000160-6ebcfceb0d44?w=100&h=100&fit=crop&q=80',
+          'https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=100&h=100&fit=crop&q=80'
+        ]
+      }
+    ];
+
+    let cart = [];
+    let currentProduct = null;
+    let currentQty = 1;
+    let currentFilter = 'All';
+
+    /* ── Navigation ── */
+    function showPage(name) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.getElementById('page-' + name).classList.add('active');
+      document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+      const nl = document.getElementById('nav-' + name);
+      if (nl) nl.classList.add('active');
+      window.scrollTo(0, 0);
+      if (name === 'home')  renderFeatured();
+      if (name === 'shop')  renderShop();
+      if (name === 'cart')  renderCart();
+    }
+
+    /* ── Image helper — renders real product images with fallback ── */
+    function imgBox(imgUrl, alt, cls) {
+      if (imgUrl) {
+        return '<div class="img-placeholder ' + (cls || '') + '"><img src="' + imgUrl + '" alt="' + (alt || 'Product image') + '" loading="lazy" /></div>';
+      }
+      return '<div class="img-placeholder ' + (cls || '') + '"><svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><rect width="100" height="100" fill="#ddd"/><line x1="0" y1="0" x2="100" y2="100" stroke="#bbb" stroke-width="1.5"/><line x1="100" y1="0" x2="0" y2="100" stroke="#bbb" stroke-width="1.5"/></svg></div>';
+    }
+
+    /* ── Featured ── */
+    function renderFeatured() {
+      var picks = products.slice(0, 4);
+      document.getElementById('featuredGrid').innerHTML = picks.map(function(p) {
+        return '<div class="feat-card" onclick="openProduct(' + p.id + ')">' +
+          imgBox(p.img, p.name) +
+          '<div class="feat-info">' +
+            '<p class="feat-name">' + p.name + '</p>' +
+            '<p class="feat-price">$' + p.price.toFixed(2) + '</p>' +
+            '<button class="btn-dark btn-sm" onclick="event.stopPropagation(); quickAdd(' + p.id + ')">Add to Cart</button>' +
+          '</div></div>';
+      }).join('');
+    }
+
+    /* ── Shop ── */
+    function renderShop() {
+      var list = currentFilter === 'All' ? products : products.filter(function(p) { return p.category === currentFilter; });
+      document.getElementById('shopHeading').textContent = (currentFilter === 'All' ? 'All Products' : currentFilter) + ' (' + list.length + ' items)';
+      document.getElementById('shopGrid').innerHTML = list.map(function(p) {
+        return '<div class="shop-card" onclick="openProduct(' + p.id + ')">' +
+          imgBox(p.img, p.name) +
+          '<p class="shop-name">' + p.name + '</p>' +
+          '<p class="shop-price">$' + p.price.toFixed(2) + '</p>' +
+          '<button class="btn-dark btn-sm">View</button>' +
+        '</div>';
+      }).join('');
+    }
+
+    function filterCat(el, cat) {
+      document.querySelectorAll('.cat-list li').forEach(function(li) { li.classList.remove('active'); });
+      el.classList.add('active');
+      currentFilter = cat;
+      renderShop();
+    }
+
+    function updatePrice(val) {
+      document.getElementById('priceVal').textContent = val;
+    }
+
+    /* ── Product Detail ── */
+    function openProduct(id) {
+      currentProduct = products.find(function(p) { return p.id === id; });
+      currentQty = 1;
+      if (!currentProduct) return;
+      document.getElementById('detailName').textContent = currentProduct.name;
+      document.getElementById('detailPrice').textContent = '$' + currentProduct.price.toFixed(2);
+      document.getElementById('detailDesc').textContent = currentProduct.desc;
+      document.getElementById('detailUrl').textContent = 'threadco.com.au/shop/' + currentProduct.name.toLowerCase().replace(/ /g, '-');
+      document.getElementById('detailBreadcrumb').innerHTML = 'Home &gt; Shop &gt; ' + currentProduct.category + ' &gt; ' + currentProduct.name;
+      document.getElementById('detailQty').textContent = 1;
+      document.querySelectorAll('.size-btn').forEach(function(b, i) { b.classList.toggle('active', i === 2); });
+
+      /* Update main product image */
+      var mainImg = document.getElementById('detailMainImg');
+      mainImg.innerHTML = '<img src="' + currentProduct.img.replace('w=400&h=400', 'w=600&h=600') + '" alt="' + currentProduct.name + '" />';
+
+      /* Update thumbnails with real images */
+      var thumbsEl = document.getElementById('detailThumbs');
+      if (currentProduct.thumbs && currentProduct.thumbs.length > 0) {
+        thumbsEl.innerHTML = currentProduct.thumbs.map(function(t, i) {
+          return '<div class="thumb ' + (i === 0 ? 'active' : '') + '" onclick="selectThumb(this)"><img src="' + t + '" alt="Thumbnail ' + (i + 1) + '" /></div>';
+        }).join('');
+      }
+
+      showPage('detail');
+      document.getElementById('nav-shop').classList.add('active');
+    }
+
+    /* Thumbnail click handler */
+    function selectThumb(el) {
+      document.querySelectorAll('.thumb').forEach(function(t) { t.classList.remove('active'); });
+      el.classList.add('active');
+    }
+
+    function selectSize(btn) {
+      document.querySelectorAll('.size-btn').forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+    }
+
+    function changeQty(d) {
+      currentQty = Math.max(1, currentQty + d);
+      document.getElementById('detailQty').textContent = currentQty;
+    }
+
+    function addCurrentToCart() {
+      if (!currentProduct) return;
+      var sizeBtn = document.querySelector('.size-btn.active');
+      var size = sizeBtn ? sizeBtn.textContent : 'M';
+      addToCart(currentProduct, currentQty, size);
+      showToast(currentProduct.name + ' added to cart');
+    }
+
+    function quickAdd(id) {
+      var p = products.find(function(x) { return x.id === id; });
+      if (p) { addToCart(p, 1, 'M'); showToast(p.name + ' added to cart'); }
+    }
+
+    /* ── Cart ── */
+    function addToCart(product, qty, size) {
+      var key = product.id + '-' + size;
+      var existing = cart.find(function(i) { return i.key === key; });
+      if (existing) existing.qty += qty;
+      else cart.push({ key: key, product: product, qty: qty, size: size, color: 'Blue' });
+      updateCartNav();
+    }
+
+    function updateCartNav() {
+      var total = cart.reduce(function(s, i) { return s + i.qty; }, 0);
+      document.getElementById('nav-cart').textContent = total > 0 ? 'Cart (' + total + ')' : 'Cart';
+    }
+
+    function renderCart() {
+      var tbody = document.getElementById('cartBody');
+      var empty = document.getElementById('emptyCart');
+      var table = document.querySelector('.cart-table');
+      if (cart.length === 0) {
+        tbody.innerHTML = '';
+        table.style.display = 'none';
+        empty.style.display = 'block';
+        document.getElementById('cartHeading').textContent = 'Shopping Cart (0 items)';
+        updateSummary(0);
+        return;
+      }
+      table.style.display = 'table';
+      empty.style.display = 'none';
+      var total = cart.reduce(function(s, i) { return s + i.qty; }, 0);
+      document.getElementById('cartHeading').textContent = 'Shopping Cart (' + total + ' items)';
+      tbody.innerHTML = cart.map(function(item) {
+        return '<tr>' +
+          '<td class="cart-product-cell">' +
+            '<div class="cart-img">' + imgBox(item.product.img, item.product.name, 'sm') + '</div>' +
+            '<div><strong>' + item.product.name + '</strong><br><small>Size: ' + item.size + ' | Color: ' + item.color + '</small></div>' +
+          '</td>' +
+          '<td>$' + item.product.price.toFixed(2) + '</td>' +
+          '<td><div class="cart-qty">' +
+            '<button onclick="cartQty(\'' + item.key + '\',-1)">&minus;</button>' +
+            '<span>' + item.qty + '</span>' +
+            '<button onclick="cartQty(\'' + item.key + '\',1)">+</button>' +
+          '</div></td>' +
+          '<td>$' + (item.product.price * item.qty).toFixed(2) + '</td>' +
+          '<td><span class="remove-x" onclick="removeItem(\'' + item.key + '\')">&times;</span></td>' +
+        '</tr>';
+      }).join('');
+      var subtotal = cart.reduce(function(s, i) { return s + i.product.price * i.qty; }, 0);
+      updateSummary(subtotal);
+    }
+
+    function updateSummary(sub) {
+      document.getElementById('sumSubtotal').textContent = '$' + sub.toFixed(2);
+      document.getElementById('sumTotal').textContent = '$' + sub.toFixed(2);
+    }
+
+    function cartQty(key, d) {
+      var item = cart.find(function(i) { return i.key === key; });
+      if (item) { item.qty = Math.max(1, item.qty + d); updateCartNav(); renderCart(); }
+    }
+
+    function removeItem(key) {
+      cart = cart.filter(function(i) { return i.key !== key; });
+      updateCartNav(); renderCart();
+    }
+
+    /* ── Contact ── */
+    function handleContact() { showToast("Message sent! We'll be in touch shortly."); }
+
+    /* ── Toast ── */
+    function showToast(msg) {
+      var t = document.getElementById('toast');
+      t.textContent = msg; t.classList.add('show');
+      setTimeout(function() { t.classList.remove('show'); }, 3000);
+    }
+
+    /* ── Init ── */
+    renderFeatured();
+  </script>
+
+</body>
+</html>
